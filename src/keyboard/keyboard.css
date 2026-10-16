@@ -80,6 +80,33 @@
   pointer-events: none;
 }
 
+.piano-key__hold {
+  position: absolute;
+  inset: 8% 38% 6% 38%;
+  border-radius: 999px;
+  background: var(--color-guide);
+  box-shadow: 0 0 0.75rem var(--color-guide-halo);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Hold meter: rises over the note length; the next guide appears when it is full. */
+.piano-key.is-holding .piano-key__hold {
+  opacity: 1;
+  animation: hold-fill var(--hold-duration) linear forwards;
+}
+
+@keyframes hold-fill {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
 .piano-key.is-guide .piano-key__guide {
   animation: guide-pulse 1.1s ease-in-out infinite alternate;
 }

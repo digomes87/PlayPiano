@@ -18,7 +18,12 @@
   letter-spacing: -0.02em;
 }
 
-.song-panel__restart {
+.song-panel__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.song-panel__action {
   padding: 0.5rem 1.1rem;
   border: 1px solid var(--color-text-muted);
   border-radius: 999px;
@@ -31,12 +36,18 @@
   transition: background-color var(--duration-fade) ease-out;
 }
 
-.song-panel__restart:hover,
-.song-panel__restart:focus-visible {
+.song-panel__action:hover,
+.song-panel__action:focus-visible {
   background: oklch(100% 0 0 / 0.08);
 }
 
-.song-panel__restart:active {
+.song-panel__listen[aria-pressed='true'] {
+  border-color: var(--color-led);
+  background: var(--color-led);
+  color: var(--color-stage);
+}
+
+.song-panel__action:active {
   transform: scale(0.97);
 }
 

@@ -54,3 +54,21 @@ describe('Lesson restart', () => {
     expect(restarted.expectedPitch()?.name()).toBe('C4');
   });
 });
+
+describe('Lesson notes', () => {
+  const rhythmic = Melody.parse('C4:1 D4:0.5 E4:2');
+
+  test('exposes the beats of the expected note', () => {
+    expect(Lesson.start(rhythmic).advance().expectedBeats()).toBe(0.5);
+  });
+
+  test('a finished lesson expects no beats', () => {
+    expect(Lesson.start(rhythmic).advance().advance().advance().expectedBeats()).toBe(0);
+  });
+
+  test('lists the remaining notes with their beats', () => {
+    const remaining = Lesson.start(rhythmic).advance().remainingNotes();
+
+    expect(remaining.map((note) => `${note.pitch.name()}:${note.beats}`)).toEqual(['D4:0.5', 'E4:2']);
+  });
+});

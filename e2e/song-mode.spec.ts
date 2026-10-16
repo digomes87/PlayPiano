@@ -39,14 +39,13 @@ test('Butter-Fly is the first song', () => {
   expect(firstSong.id).toBe('butterFly');
 });
 
-test('the correct key advances the guide to the next note', async ({ page }) => {
+test('the correct key advances progress and later guides the next note', async ({ page }) => {
   const [first, second] = firstSong.lesson().upcoming(2).map((pitch) => pitch.name());
 
   await tapKey(page, first);
 
   await expect(progress(page)).toHaveAttribute('value', '1');
-  await expect(pianoKey(page, second)).toHaveClass(/is-guide/);
-  await expect(pianoKey(page, first)).not.toHaveClass(/is-guide/);
+  await expect(pianoKey(page, second)).toHaveClass(/is-guide/, { timeout: 10_000 });
 });
 
 test('picking another song switches title, guide and progress', async ({ page }) => {

@@ -28,6 +28,8 @@ export const messages = {
   upcomingNotes: 'Próximas notas',
   songFinished: 'Parabéns! Você tocou a música inteira.',
   restart: 'Recomeçar',
+  listen: 'Ouvir',
+  stopListening: 'Parar',
   songPicker: 'Escolha a música',
   songTitles,
   noteNames,

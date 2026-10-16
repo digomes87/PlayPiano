@@ -6,6 +6,7 @@ import type { PressJudge } from './press-judge';
 const LIT_CLASS = 'is-lit';
 const WRONG_CLASS = 'is-wrong';
 const GUIDE_CLASS = 'is-guide';
+const HOLDING_CLASS = 'is-holding';
 
 /** One key on screen: knows its pitch and how to light up. */
 export class PianoKey {
@@ -26,7 +27,9 @@ export class PianoKey {
     element.style.setProperty('--white-keys-before', String(whiteKeysBefore));
     const guideLight = document.createElement('span');
     guideLight.className = 'piano-key__guide';
-    element.append(guideLight);
+    const holdMeter = document.createElement('span');
+    holdMeter.className = 'piano-key__hold';
+    element.append(guideLight, holdMeter);
     return new PianoKey(pitch, element);
   }
 
@@ -69,5 +72,17 @@ export class PianoKey {
 
   showGuide(isGuide: boolean): void {
     this.element.classList.toggle(GUIDE_CLASS, isGuide);
+  }
+
+  /** Fills the key from the bottom over the note length, so the learner sees how long to hold. */
+  showHold(milliseconds: number): void {
+    this.element.classList.remove(HOLDING_CLASS);
+    this.element.style.setProperty('--hold-duration', `${milliseconds}ms`);
+    void this.element.offsetWidth; // restart the fill animation on a repeated note
+    this.element.classList.add(HOLDING_CLASS);
+  }
+
+  clearHold(): void {
+    this.element.classList.remove(HOLDING_CLASS);
   }
 }

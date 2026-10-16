@@ -1,5 +1,5 @@
 import type { Pitch } from '../music/pitch';
-import type { Melody } from './melody';
+import type { Melody, SongNote } from './melody';
 
 /** Progress of a learner through a melody. Immutable: advancing returns a new lesson. */
 export class Lesson {
@@ -17,6 +17,14 @@ export class Lesson {
 
   expectedPitch(): Pitch | undefined {
     return this.melody.noteAt(this.position)?.pitch;
+  }
+
+  expectedBeats(): number {
+    return this.melody.noteAt(this.position)?.beats ?? 0;
+  }
+
+  remainingNotes(): SongNote[] {
+    return this.melody.slice(this.position, Infinity);
   }
 
   accepts(pitch: Pitch): boolean {

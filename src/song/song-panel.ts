@@ -9,6 +9,7 @@ const UPCOMING_NOTE_COUNT = 6;
 export interface SongPanelActions {
   restart(): void;
   switchTo(song: Song): void;
+  toggleListening(): void;
 }
 
 /** Song picker, title, progress, upcoming note names and the restart button. */
@@ -29,7 +30,10 @@ export class SongPanel {
       <div class="song-panel__picker"></div>
       <header class="song-panel__header">
         <h2 class="song-panel__title" id="song-title"></h2>
-        <button type="button" class="song-panel__restart"></button>
+        <div class="song-panel__actions">
+          <button type="button" class="song-panel__action song-panel__listen"></button>
+          <button type="button" class="song-panel__action song-panel__restart"></button>
+        </div>
       </header>
       <progress class="song-panel__progress"></progress>
       <ol class="song-panel__upcoming"></ol>
@@ -40,6 +44,7 @@ export class SongPanel {
     const restart = root.querySelector<HTMLButtonElement>('.song-panel__restart')!;
     restart.textContent = messages.restart;
     restart.addEventListener('click', () => actions.restart());
+    root.querySelector('.song-panel__listen')!.addEventListener('click', () => actions.toggleListening());
     const pickerSlot = root.querySelector<HTMLElement>('.song-panel__picker')!;
     const picker = SongPicker.mount(pickerSlot, songs, (song) => actions.switchTo(song));
     container.append(root);
@@ -49,6 +54,12 @@ export class SongPanel {
   showSong(song: Song): void {
     this.root.querySelector('.song-panel__title')!.textContent = messages.songTitles[song.id];
     this.picker.select(song);
+  }
+
+  showListening(isListening: boolean): void {
+    const listen = this.root.querySelector('.song-panel__listen')!;
+    listen.textContent = isListening ? messages.stopListening : messages.listen;
+    listen.setAttribute('aria-pressed', String(isListening));
   }
 
   show(lesson: Lesson): void {

@@ -35,4 +35,12 @@ export class PianoKeys {
   guideTo(pitch: Pitch | undefined): void {
     this.keys.forEach((key) => key.showGuide(pitch !== undefined && key.plays(pitch)));
   }
+
+  forPitch(pitch: Pitch): PianoKey | undefined {
+    return this.keys.find((key) => key.plays(pitch));
+  }
+
+  clearHolds(): void {
+    this.keys.forEach((key) => key.clearHold());
+  }
 }

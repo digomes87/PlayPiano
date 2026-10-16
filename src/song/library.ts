@@ -1,9 +1,12 @@
+import { Tempo } from '../music/tempo';
 import { Melody } from './melody';
 import { Song } from './song';
 
 // Digimon Adventure opening (Wada Kouji), opening a cappella verse.
 // Top voice of the right hand from the letter-note arrangement at
 // pianoletternotes.blogspot.com/2021/12/butterfly-digimon-opening.html
+// The arrangement uses about 5.5 dashes per second and the score counts 4 dashes per beat.
+const BUTTER_FLY_TEMPO = new Tempo(82);
 const BUTTER_FLY = `
   E5:1.5 F#5:1.5 G#5:1 F#5:1 G#5:0.5 F#5:1
   E5:0.5 D#5:1 E5:3 C#5:0.5 E5:0.5 G#5:0.5 F#5:1
@@ -22,6 +25,6 @@ const ODE_TO_JOY = `
 `;
 
 export const SONGS: readonly Song[] = [
-  new Song('butterFly', Melody.parse(BUTTER_FLY)),
-  new Song('odeToJoy', Melody.parse(ODE_TO_JOY)),
+  new Song('butterFly', BUTTER_FLY_TEMPO, Melody.parse(BUTTER_FLY)),
+  new Song('odeToJoy', new Tempo(100), Melody.parse(ODE_TO_JOY)),
 ];
