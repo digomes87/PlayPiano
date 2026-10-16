@@ -2,7 +2,7 @@ import type { Tempo } from '../music/tempo';
 import { Lesson } from './lesson';
 import type { Melody } from './melody';
 
-export type SongId = 'butterFly' | 'odeToJoy';
+export type SongId = 'butterFlyVerse' | 'butterFlyChorus' | 'odeToJoy';
 
 /** A song the learner can practise. Its display title lives in the i18n catalog. */
 export class Song {

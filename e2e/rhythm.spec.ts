@@ -2,7 +2,9 @@ import { test, expect, type Locator, type Page } from '@playwright/test';
 import { messages } from '../src/i18n/catalog';
 import { SONGS } from '../src/song/library';
 
-const [butterFly, odeToJoy] = SONGS;
+const songById = (id: string) => SONGS.find((song) => song.id === id)!;
+const butterFly = songById('butterFlyVerse');
+const odeToJoy = songById('odeToJoy');
 
 const pianoKey = (page: Page, noteName: string): Locator =>
   page.getByRole('button', { name: noteName, exact: true });

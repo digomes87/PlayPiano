@@ -35,8 +35,8 @@ test('shows the song and guides the first note', async ({ page }) => {
   await expect(progress(page)).toHaveAttribute('value', '0');
 });
 
-test('Butter-Fly is the first song', () => {
-  expect(firstSong.id).toBe('butterFly');
+test('Butter-Fly verse is the first song', () => {
+  expect(firstSong.id).toBe('butterFlyVerse');
 });
 
 test('the correct key advances progress and later guides the next note', async ({ page }) => {

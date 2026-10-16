@@ -16,10 +16,10 @@ test.beforeEach(async ({ page }) => {
   await page.goto('./');
 });
 
-test('renders two octaves from C4 to C6', async ({ page }) => {
-  await expect(page.getByRole('group', { name: messages.keyboardLabel }).getByRole('button')).toHaveCount(25);
+test('renders C4 to E6', async ({ page }) => {
+  await expect(page.getByRole('group', { name: messages.keyboardLabel }).getByRole('button')).toHaveCount(29);
   await expect(pianoKey(page, 'C4')).toBeVisible();
-  await expect(pianoKey(page, 'C6')).toBeVisible();
+  await expect(pianoKey(page, 'E6')).toBeVisible();
 });
 
 test('a key lights up while pressed and goes dark on release', async ({ page }) => {
