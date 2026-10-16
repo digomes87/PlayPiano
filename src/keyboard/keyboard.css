@@ -56,6 +56,41 @@
   transition-duration: var(--duration-press);
 }
 
+/* Wrong note: same light, in red. */
+.piano-key.is-wrong::before {
+  background: linear-gradient(to top, var(--color-wrong) 0%, var(--color-wrong-halo) 45%, transparent 90%);
+}
+
+.piano-key.is-wrong::after {
+  box-shadow:
+    0 0 0.75rem var(--color-wrong-halo),
+    0 0 2rem var(--color-wrong-halo);
+}
+
+/* Guide LED: a pulsing light at the bottom of the key to press next. */
+.piano-key__guide {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to top, var(--color-guide) 0, var(--color-guide) 0.6rem, var(--color-guide-halo) 0.6rem, transparent 65%);
+  box-shadow: 0 0 1.5rem var(--color-guide-halo);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.piano-key.is-guide .piano-key__guide {
+  animation: guide-pulse 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes guide-pulse {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .piano-key--white {
   left: calc(var(--white-keys-before) * var(--white-key-width));
   width: var(--white-key-width);
@@ -88,5 +123,10 @@
   .piano-key::before,
   .piano-key::after {
     transition: none;
+  }
+
+  .piano-key.is-guide .piano-key__guide {
+    animation: none;
+    opacity: 1;
   }
 }

@@ -1,6 +1,7 @@
 import type { Synth } from '../audio/synth';
 import type { Voice } from '../audio/voice';
 import type { PianoKey } from './piano-key';
+import { FREE_PLAY, type PressJudge } from './press-judge';
 
 interface Press {
   readonly key: PianoKey;
@@ -12,15 +13,21 @@ export class KeyPresses {
   private readonly pressesByPointer = new Map<number, Press>();
 
   private readonly synth: Synth;
+  private judge: PressJudge = FREE_PLAY;
 
   constructor(synth: Synth) {
     this.synth = synth;
+  }
+
+  judgeWith(judge: PressJudge): void {
+    this.judge = judge;
   }
 
   begin(pointerId: number, key: PianoKey): void {
     this.end(pointerId);
     key.light();
     this.pressesByPointer.set(pointerId, { key, voice: key.sound(this.synth) });
+    key.submitTo(this.judge);
   }
 
   slideTo(pointerId: number, key: PianoKey): void {

@@ -38,3 +38,10 @@ describe('Pitch', () => {
     expect(Pitch.parse('C4').equals(Pitch.fromMidi(60))).toBe(true);
   });
 });
+
+describe('Pitch class', () => {
+  test('exposes the pitch class without octave for display', () => {
+    expect(Pitch.parse('C#5').pitchClass()).toBe('C#');
+    expect(Pitch.parse('A3').pitchClass()).toBe('A');
+  });
+});

@@ -1,3 +1,4 @@
+import type { Pitch } from '../music/pitch';
 import type { PitchRange } from '../music/pitch-range';
 import { PianoKey } from './piano-key';
 
@@ -29,5 +30,9 @@ export class PianoKeys {
 
   ownerOf(element: Element | null): PianoKey | undefined {
     return this.keys.find((key) => key.owns(element));
+  }
+
+  guideTo(pitch: Pitch | undefined): void {
+    this.keys.forEach((key) => key.showGuide(pitch !== undefined && key.plays(pitch)));
   }
 }
