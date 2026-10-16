@@ -2,6 +2,7 @@ import type { PitchClass } from '../music/pitch';
 import type { SongId } from '../song/song';
 
 const songTitles: Record<SongId, string> = {
+  butterFly: 'Butter-Fly (Digimon)',
   odeToJoy: 'Ode à Alegria',
 };
 
@@ -27,6 +28,7 @@ export const messages = {
   upcomingNotes: 'Próximas notas',
   songFinished: 'Parabéns! Você tocou a música inteira.',
   restart: 'Recomeçar',
+  songPicker: 'Escolha a música',
   songTitles,
   noteNames,
 } as const;

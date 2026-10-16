@@ -1,25 +1,32 @@
 import { messages } from '../i18n/catalog';
 import type { Lesson } from './lesson';
 import type { Song } from './song';
+import { SongPicker } from './song-picker';
 import './song-panel.css';
 
 const UPCOMING_NOTE_COUNT = 6;
 
-/** Song title, progress, upcoming note names and the restart button. */
+export interface SongPanelActions {
+  restart(): void;
+  switchTo(song: Song): void;
+}
+
+/** Song picker, title, progress, upcoming note names and the restart button. */
 export class SongPanel {
   private readonly root: HTMLElement;
-  private readonly onRestart: () => void;
+  private readonly picker: SongPicker;
 
-  private constructor(root: HTMLElement, onRestart: () => void) {
+  private constructor(root: HTMLElement, picker: SongPicker) {
     this.root = root;
-    this.onRestart = onRestart;
+    this.picker = picker;
   }
 
-  static mount(container: HTMLElement, song: Song, onRestart: () => void): SongPanel {
+  static mount(container: HTMLElement, songs: readonly Song[], actions: SongPanelActions): SongPanel {
     const root = document.createElement('section');
     root.className = 'song-panel';
     root.setAttribute('aria-labelledby', 'song-title');
     root.innerHTML = `
+      <div class="song-panel__picker"></div>
       <header class="song-panel__header">
         <h2 class="song-panel__title" id="song-title"></h2>
         <button type="button" class="song-panel__restart"></button>
@@ -28,15 +35,20 @@ export class SongPanel {
       <ol class="song-panel__upcoming"></ol>
       <p class="song-panel__finished" role="status"></p>
     `;
-    root.querySelector('.song-panel__title')!.textContent = messages.songTitles[song.id];
     root.querySelector('.song-panel__progress')!.setAttribute('aria-label', messages.songProgress);
     root.querySelector('.song-panel__upcoming')!.setAttribute('aria-label', messages.upcomingNotes);
     const restart = root.querySelector<HTMLButtonElement>('.song-panel__restart')!;
     restart.textContent = messages.restart;
+    restart.addEventListener('click', () => actions.restart());
+    const pickerSlot = root.querySelector<HTMLElement>('.song-panel__picker')!;
+    const picker = SongPicker.mount(pickerSlot, songs, (song) => actions.switchTo(song));
     container.append(root);
-    const panel = new SongPanel(root, onRestart);
-    restart.addEventListener('click', () => panel.onRestart());
-    return panel;
+    return new SongPanel(root, picker);
+  }
+
+  showSong(song: Song): void {
+    this.root.querySelector('.song-panel__title')!.textContent = messages.songTitles[song.id];
+    this.picker.select(song);
   }
 
   show(lesson: Lesson): void {
