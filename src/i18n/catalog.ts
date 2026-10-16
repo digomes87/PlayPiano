@@ -2,7 +2,8 @@ import type { PitchClass } from '../music/pitch';
 import type { SongId } from '../song/song';
 
 const songTitles: Record<SongId, string> = {
-  butterFly: 'Butter-Fly (Digimon)',
+  butterFlyVerse: 'Butter-Fly · Estrofe',
+  butterFlyChorus: 'Butter-Fly · Refrão',
   odeToJoy: 'Ode à Alegria',
 };
 
