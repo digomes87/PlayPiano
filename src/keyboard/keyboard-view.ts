@@ -7,6 +7,9 @@ import { PianoKeys } from './piano-keys';
 import type { PressJudge } from './press-judge';
 import './keyboard.css';
 
+// Real pointers have non-negative ids, so demonstrations never collide with a finger.
+const DEMONSTRATION_POINTER = -1;
+
 /** Renders the keyboard and turns touches (or mouse) into lit, sounding keys. */
 export class KeyboardView {
   private readonly keys: PianoKeys;
@@ -31,6 +34,28 @@ export class KeyboardView {
   /** Lights the guide LED on the key the learner should press next. */
   guideTo(pitch: Pitch | undefined): void {
     this.keys.guideTo(pitch);
+  }
+
+  /** Holds a key down on the learner's behalf, as in a demonstration. */
+  playNote(pitch: Pitch): void {
+    const key = this.keys.forPitch(pitch);
+    if (!key) {
+      return;
+    }
+    this.presses.begin(DEMONSTRATION_POINTER, key);
+  }
+
+  stopNote(): void {
+    this.presses.end(DEMONSTRATION_POINTER);
+  }
+
+  showHold(pitch: Pitch, milliseconds: number): void {
+    this.keys.clearHolds();
+    this.keys.forPitch(pitch)?.showHold(milliseconds);
+  }
+
+  clearHold(): void {
+    this.keys.clearHolds();
   }
 
   private render(container: HTMLElement): void {
