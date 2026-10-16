@@ -10,6 +10,9 @@ import './keyboard.css';
 // Real pointers have non-negative ids, so demonstrations never collide with a finger.
 const DEMONSTRATION_POINTER = -1;
 
+// Activation-triggering events: the only ones in which iPad Safari lets audio start.
+const AUDIO_UNLOCK_EVENTS = ['pointerup', 'touchend', 'click', 'keydown'] as const;
+
 /** Renders the keyboard and turns touches (or mouse) into lit, sounding keys. */
 export class KeyboardView {
   private readonly keys: PianoKeys;
@@ -21,7 +24,11 @@ export class KeyboardView {
   }
 
   static mount(container: HTMLElement, range: PitchRange): KeyboardView {
-    const view = new KeyboardView(PianoKeys.forRange(range), new KeyPresses(new Synth()));
+    const synth = new Synth();
+    const view = new KeyboardView(PianoKeys.forRange(range), new KeyPresses(synth));
+    AUDIO_UNLOCK_EVENTS.forEach((type) =>
+      document.addEventListener(type, () => synth.unlock(), { capture: true, passive: true }),
+    );
     view.render(container);
     return view;
   }
