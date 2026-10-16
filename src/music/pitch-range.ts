@@ -13,6 +13,10 @@ export class PitchRange {
     }
   }
 
+  contains(pitch: Pitch): boolean {
+    return !this.lowest.isAbove(pitch) && !pitch.isAbove(this.highest);
+  }
+
   pitches(): Pitch[] {
     const pitches = [this.lowest];
     while (!pitches[pitches.length - 1].equals(this.highest)) {

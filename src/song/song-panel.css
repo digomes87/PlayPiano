@@ -2,7 +2,7 @@
   display: grid;
   align-content: center;
   justify-items: start;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .song-panel__header {
@@ -95,4 +95,34 @@
   color: var(--color-led);
   font-size: 1.5rem;
   font-weight: 800;
+}
+
+.song-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.song-picker__song {
+  padding: 0.45rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: oklch(100% 0 0 / 0.06);
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color var(--duration-fade) ease-out, color var(--duration-fade) ease-out;
+}
+
+.song-picker__song:hover,
+.song-picker__song:focus-visible {
+  background: oklch(100% 0 0 / 0.12);
+  color: var(--color-text);
+}
+
+.song-picker__song[aria-pressed='true'] {
+  background: var(--color-text);
+  color: var(--color-stage);
 }

@@ -3,8 +3,10 @@
   --black-key-width: calc(var(--white-key-width) * 0.6);
 
   position: relative;
-  align-self: end;
-  height: min(60dvh, 26rem);
+  align-self: stretch;
+  height: 100%;
+  max-height: 28rem;
+  margin-top: auto;
   padding-top: 0.75rem;
   border-radius: 0.75rem;
   background: linear-gradient(var(--color-ebony-shine), var(--color-ebony) 1rem);

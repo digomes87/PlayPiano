@@ -21,3 +21,17 @@ describe('PitchRange', () => {
     expect(() => new PitchRange(Pitch.parse('C5'), Pitch.parse('C4'))).toThrow(RangeError);
   });
 });
+
+describe('PitchRange.contains', () => {
+  const range = new PitchRange(Pitch.parse('C4'), Pitch.parse('C6'));
+
+  test('includes both ends', () => {
+    expect(range.contains(Pitch.parse('C4'))).toBe(true);
+    expect(range.contains(Pitch.parse('C6'))).toBe(true);
+  });
+
+  test('excludes pitches outside', () => {
+    expect(range.contains(Pitch.parse('B3'))).toBe(false);
+    expect(range.contains(Pitch.parse('C#6'))).toBe(false);
+  });
+});

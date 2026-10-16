@@ -26,7 +26,7 @@ body {
 
 #app {
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto auto minmax(14rem, 1fr);
   height: 100dvh;
   padding: var(--space-gutter);
   padding-bottom: max(var(--space-gutter), env(safe-area-inset-bottom));

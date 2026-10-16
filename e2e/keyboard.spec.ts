@@ -59,3 +59,9 @@ test('black keys sit above and between white keys', async ({ page }) => {
   expect(black!.x + black!.width).toBeLessThan(rightWhite!.x + rightWhite!.width);
   expect(black!.height).toBeLessThan(leftWhite!.height);
 });
+
+test('the whole keyboard fits on screen', async ({ page }) => {
+  const keyboard = await page.getByRole('group', { name: messages.keyboardLabel }).boundingBox();
+
+  expect(keyboard!.y + keyboard!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+});
