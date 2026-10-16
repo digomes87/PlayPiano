@@ -1,0 +1,41 @@
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, var(--color-stage-glow), transparent 70%),
+    var(--color-stage);
+  color: var(--color-text);
+  font-family: var(--font-display);
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#app {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100dvh;
+  padding: var(--space-gutter);
+  padding-bottom: max(var(--space-gutter), env(safe-area-inset-bottom));
+  gap: var(--space-gutter);
+}
+
+.brand {
+  margin: 0;
+  font-size: var(--text-brand);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}

@@ -1,0 +1,92 @@
+.keyboard {
+  --white-key-width: calc(100% / var(--white-key-count));
+  --black-key-width: calc(var(--white-key-width) * 0.6);
+
+  position: relative;
+  align-self: end;
+  height: min(60dvh, 26rem);
+  padding-top: 0.75rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(var(--color-ebony-shine), var(--color-ebony) 1rem);
+  box-shadow: 0 1.5rem 3rem oklch(0% 0 0 / 0.5);
+  touch-action: none;
+}
+
+.piano-key {
+  position: absolute;
+  top: 0.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-key);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--duration-press) ease-out;
+}
+
+.piano-key:focus-visible {
+  outline: 3px solid var(--color-led);
+  outline-offset: -3px;
+}
+
+/* LED: the key fills with amber light and glows around its edges. Opacity-only fades. */
+.piano-key::before,
+.piano-key::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity var(--duration-fade) var(--ease-out-expo);
+  pointer-events: none;
+}
+
+.piano-key::before {
+  background: linear-gradient(to top, var(--color-led) 0%, var(--color-led-halo) 45%, transparent 90%);
+}
+
+.piano-key::after {
+  box-shadow:
+    0 0 0.75rem var(--color-led-halo),
+    0 0 2rem var(--color-led-halo);
+}
+
+.piano-key.is-lit::before,
+.piano-key.is-lit::after {
+  opacity: 1;
+  transition-duration: var(--duration-press);
+}
+
+.piano-key--white {
+  left: calc(var(--white-keys-before) * var(--white-key-width));
+  width: var(--white-key-width);
+  bottom: 0;
+  background: linear-gradient(var(--color-ivory) 75%, var(--color-ivory-shade));
+  box-shadow: inset -1px 0 0 var(--color-ivory-shade);
+  transform-origin: top;
+}
+
+.piano-key--white.is-lit {
+  transform: scaleY(0.99);
+}
+
+.piano-key--black {
+  z-index: 1;
+  left: calc(var(--white-keys-before) * var(--white-key-width) - var(--black-key-width) / 2);
+  width: var(--black-key-width);
+  height: 60%;
+  background: linear-gradient(var(--color-ebony-shine), var(--color-ebony) 30%);
+  box-shadow: 0 0.25rem 0.5rem oklch(0% 0 0 / 0.5);
+  transform-origin: top;
+}
+
+.piano-key--black.is-lit {
+  transform: scaleY(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .piano-key,
+  .piano-key::before,
+  .piano-key::after {
+    transition: none;
+  }
+}
