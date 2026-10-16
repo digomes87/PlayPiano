@@ -7,7 +7,7 @@ const CONCERT_A_HERTZ = 440;
 const MIDI_OCTAVE_OFFSET = 1;
 const NOTE_NAME_PATTERN = /^([A-G]#?)(-?\d)$/;
 
-type PitchClass = (typeof PITCH_CLASSES)[number];
+export type PitchClass = (typeof PITCH_CLASSES)[number];
 
 /** A single semitone on the keyboard, identified by its MIDI number. */
 export class Pitch {
@@ -65,7 +65,7 @@ export class Pitch {
     return this.midiNumber === other.midiNumber;
   }
 
-  private pitchClass(): PitchClass {
+  pitchClass(): PitchClass {
     return PITCH_CLASSES[this.midiNumber % SEMITONES_PER_OCTAVE];
   }
 }

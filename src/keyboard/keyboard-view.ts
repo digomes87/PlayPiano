@@ -1,8 +1,10 @@
 import { Synth } from '../audio/synth';
 import { messages } from '../i18n/catalog';
+import type { Pitch } from '../music/pitch';
 import type { PitchRange } from '../music/pitch-range';
 import { KeyPresses } from './key-presses';
 import { PianoKeys } from './piano-keys';
+import type { PressJudge } from './press-judge';
 import './keyboard.css';
 
 /** Renders the keyboard and turns touches (or mouse) into lit, sounding keys. */
@@ -19,6 +21,16 @@ export class KeyboardView {
     const view = new KeyboardView(PianoKeys.forRange(range), new KeyPresses(new Synth()));
     view.render(container);
     return view;
+  }
+
+  /** Every press is reported to the judge; a wrong press lights the key red. */
+  judgeWith(judge: PressJudge): void {
+    this.presses.judgeWith(judge);
+  }
+
+  /** Lights the guide LED on the key the learner should press next. */
+  guideTo(pitch: Pitch | undefined): void {
+    this.keys.guideTo(pitch);
   }
 
   private render(container: HTMLElement): void {
