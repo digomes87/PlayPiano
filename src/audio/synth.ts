@@ -7,20 +7,45 @@ const DECAY_SECONDS = 2.5;
 const SILENCE = 0.0001;
 const OVERTONE_RATIO = 2;
 const OVERTONE_LEVEL = 0.25;
+const SILENT_BUFFER_SAMPLE_RATE = 22050;
+
+type AudioContextFactory = () => AudioContext | null;
+
+const browserAudioContext: AudioContextFactory = () =>
+  typeof AudioContext === 'undefined' ? null : new AudioContext();
 
 /**
  * Small piano-like synthesizer: a triangle fundamental plus a quiet octave overtone,
- * with a fast attack and a natural decay. The AudioContext is created on the first
- * note because iPad Safari only allows audio to start inside a user gesture.
+ * with a fast attack and a natural decay.
+ *
+ * iPad Safari keeps audio suspended until an activation gesture (finger lifted, click,
+ * key press). Touching down is not one, so `unlock` must be called from those events;
+ * it is safe to call on every gesture and also recovers from system interruptions.
  */
 export class Synth {
+  private readonly createContext: AudioContextFactory;
   private context: AudioContext | null = null;
 
+  constructor(createContext: AudioContextFactory = browserAudioContext) {
+    this.createContext = createContext;
+  }
+
+  unlock(): void {
+    const context = this.audioContext();
+    if (!context || context.state === 'running') {
+      return;
+    }
+    // Rejected outside a gesture; the next gesture calls unlock again.
+    context.resume().catch(() => undefined);
+    this.playSilence(context);
+  }
+
   start(pitch: Pitch): Voice {
-    if (typeof AudioContext === 'undefined') {
+    const context = this.audioContext();
+    if (!context) {
       return SILENT_VOICE;
     }
-    const context = this.audioContext();
+    this.unlock();
     const envelope = this.envelope(context);
     const oscillators = [
       this.oscillator(context, 'triangle', pitch.frequency(), envelope),
@@ -29,12 +54,17 @@ export class Synth {
     return new OscillatorVoice(oscillators, envelope);
   }
 
-  private audioContext(): AudioContext {
-    this.context ??= new AudioContext();
-    if (this.context.state === 'suspended') {
-      void this.context.resume();
-    }
+  private audioContext(): AudioContext | null {
+    this.context ??= this.createContext();
     return this.context;
+  }
+
+  // Older iOS versions only unlock audio once a sound has actually been started in a gesture.
+  private playSilence(context: AudioContext): void {
+    const source = context.createBufferSource();
+    source.buffer = context.createBuffer(1, 1, SILENT_BUFFER_SAMPLE_RATE);
+    source.connect(context.destination);
+    source.start(0);
   }
 
   private envelope(context: AudioContext): GainNode {
